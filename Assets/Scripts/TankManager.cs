@@ -22,11 +22,12 @@ public class TankManager : MonoBehaviour
     [SerializeField] private ScoreManagerSO scoreManager;
 
     // Events
-    public event Action<int, int> SetScoreUI = delegate { };
+    public static event Action<int, int> SetScoreUI = delegate { };
 
     private void Awake()
     {
-        groundCol.transform.GetChild(0).GetComponent<Border>().PlayerFall += TankDied;
+        Border.PlayerFall += TankDied;
+        BulletController.HitPlayer += TankDied;
 
         FirstSpawn();        
     }

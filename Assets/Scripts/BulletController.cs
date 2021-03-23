@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class BulletController : MonoBehaviour
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float bulletTurnSpeed = 80f;
     [SerializeField] private float activeTime = 1.5f;
+
+    public static event Action<GameObject, bool> HitPlayer = delegate { };
 
     public void Player_ControlBullet(Transform bullet) => StartCoroutine(BulletMaster(bullet));
 
@@ -40,7 +43,8 @@ public class BulletController : MonoBehaviour
         if (!hitTank || hitTank == PlayerOwner.gameObject) return;
         if (hitTank.CompareTag("Ground") || hitTank.CompareTag("Bullet")) return;
 
-        PlayerOwner.spawner.TankDied(hitTank);
+        //PlayerOwner.spawner.TankDied(hitTank);
+        HitPlayer(hitTank, false);
 
         PlayerOwner.ResetBullet();
     }

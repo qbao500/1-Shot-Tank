@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Border : MonoBehaviour
 {
-    public event Action<GameObject, bool> PlayerFall = delegate { };
+    public static event Action<GameObject, bool> PlayerFall = delegate { };
 
     private void OnTriggerEnter(Collider other)
     {

@@ -8,9 +8,7 @@ public class ScoreUI : MonoBehaviour
     [SerializeField] private Text P1Score;
     [SerializeField] private Text P2Score;
 
-    [SerializeField] private TankManager manager;
-
-    private void Start() => manager.SetScoreUI += SetScoreText;
+    private void Start() => TankManager.SetScoreUI += SetScoreText;
 
     private void SetScoreText(int p1, int p2)
     {
