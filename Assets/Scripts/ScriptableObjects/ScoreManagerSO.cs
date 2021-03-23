@@ -5,28 +5,38 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ScoreManager", menuName = "ScriptableObjects/ScoreManager")]
 public class ScoreManagerSO : ScriptableObject
 {
-    private int player1Score = 0;
-    private int player2Score = 0;
+    public int P1Score { get; private set; }
+    public int P2Score { get; private set; }
 
     private void OnEnable() => ResetScores();
 
-    public void ResetScores()
+    public void ResetScores() => P1Score = P2Score = 0;
+
+    public void CalculateScore(GameObject deadTank, bool isFalled = false)
     {
-        player1Score = 0;
-        player2Score = 0;
+        if (deadTank.CompareTag("Tank1"))
+        {
+            if (isFalled) MinusScore1();
+            else AddScore2();
+        }
+        else
+        {
+            if (isFalled) MinusScore2();
+            else AddScore1();
+        }
     }
 
-    public void AddScore1() => player1Score++;
+    public void AddScore1() => P1Score++;
 
-    public void AddScore2() => player2Score++;
+    public void AddScore2() => P2Score++;
 
     public void MinusScore1()
     {
-        if (player1Score > 0) { player1Score--; }
+        if (P1Score > 0) { P1Score--; }
     }
 
     public void MinusScore2()
     {
-        if (player2Score > 0) { player2Score--; }
+        if (P2Score > 0) { P2Score--; }
     }
 }

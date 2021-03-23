@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    public PlayerController Player { get; set; }
-
-    public int Owner { get; set; }
+    public PlayerController PlayerOwner { get; set; }
 
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private float bulletTurnSpeed = 80f;
+    [SerializeField] private float activeTime = 1.5f;
 
     public void Player_ControlBullet(Transform bullet) => StartCoroutine(BulletMaster(bullet));
 
@@ -17,34 +16,32 @@ public class BulletController : MonoBehaviour
     {
         float elapsed = 0f;
 
-        while (elapsed < 1.8f)
+        while (elapsed < activeTime)
         {
             // Fly forward
             elapsed += Time.deltaTime;
             bullet.position += bullet.forward * bulletSpeed * Time.deltaTime;
 
             // Control bullet
-            bullet.eulerAngles += Vector3.zero.With(y: Player.RotateValue * bulletTurnSpeed * Time.deltaTime);
-
-            // Check if bullet hits sonething. Reset bullet and destroy hit target if yes
-            if (Physics.Raycast(bullet.position, bullet.forward, out RaycastHit hit, 0.1f))
-            {
-                GameObject hitTank = hit.transform.root.gameObject;
-
-                if (!hitTank.CompareTag("Ground"))      // Somehow it touches ground sometimes
-                {
-                    hitTank.SetActive(false);           // Kill it
-                    Player.spawner.Respawn(hitTank);    // Then respawn
-                }
-
-                Player.ResetBullet();
-                yield break;
-            }
+            bullet.eulerAngles += Vector3.zero.With(y: PlayerOwner.RotateValue * bulletTurnSpeed * Time.deltaTime);
 
             yield return null;
         }
 
-        // If bullet still exist after 1.5 sec, reset
-        if (Player.IsBulletActive) Player.ResetBullet();
+        // If bullet still exist after aliveTime, reset
+        if (PlayerOwner.IsBulletActive()) PlayerOwner.ResetBullet();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        GameObject hitTank = other.transform.root.gameObject;
+
+        // Return if null or hit self/ground/bullet
+        if (!hitTank || hitTank == PlayerOwner.gameObject) return;
+        if (hitTank.CompareTag("Ground") || hitTank.CompareTag("Bullet")) return;
+
+        PlayerOwner.spawner.TankDied(hitTank);
+
+        PlayerOwner.ResetBullet();
     }
 }

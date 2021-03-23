@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7009887366751334317}
   - component: {fileID: 2697533564072210387}
-  - component: {fileID: 652606574608136496}
+  - component: {fileID: -4234825224570697401}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -177,7 +177,7 @@ MonoBehaviour:
   recoilPower: 6.5
   shootPoint: {fileID: 484724357768185080}
   bullet: {fileID: 4919274459044377584, guid: 3d13a42d8f4d3f0419e1193b1a4a46a8, type: 3}
---- !u!54 &652606574608136496
+--- !u!54 &-4234825224570697401
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,7 +191,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!1 &2304758796515508576
 GameObject:

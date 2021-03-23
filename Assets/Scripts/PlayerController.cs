@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerControls playerControl;
     private Rigidbody rb;
-    [HideInInspector] public TankSpawner spawner;
+    [HideInInspector] public TankManager spawner;
 
     // Speed
     [SerializeField] private float moveSpeed = 3f;
@@ -34,9 +34,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControl = new PlayerControls();
-        
-        rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = Vector3.zero;
+
+        SetupRigidBody();
 
         InstantiateBullet();
     }
@@ -55,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         playerControl.Disable();
       
-        if (IsBulletActive) { ResetBullet(); }  // If dead, remove bullet if exist
+        if (IsBulletActive()) { ResetBullet(); }  // If dead, remove bullet if exist
     }
 
     private void FixedUpdate()
@@ -94,7 +93,7 @@ public class PlayerController : MonoBehaviour
         turnSpeed = newTurn / 4;
 
         // Teleport to bullet position
-        Vector3 destination = bullet.transform.position;
+        Vector3 destination = bullet.transform.position.With(y: transform.position.y);
         isTeleporting = true;
 
         while (Vector3.Distance(transform.position, destination) > 0f)
@@ -113,7 +112,11 @@ public class PlayerController : MonoBehaviour
         isTeleporting = false;
     }
 
-    public bool IsBulletActive => bullet.activeInHierarchy;
+    public bool IsBulletActive()
+    {
+        if (bullet) return bullet.activeInHierarchy;
+        else return false;       
+    }
 
     private void GetActionMap()
     {
@@ -122,22 +125,30 @@ public class PlayerController : MonoBehaviour
             playerControl.Tank1.Forward.performed += ctx => forwardValue = ctx.ReadValue<float>();
             playerControl.Tank1.Rotate.performed += ctx => RotateValue = ctx.ReadValue<float>();
             playerControl.Tank1.Shoot.performed += ctx => { if (canShoot && !isTeleporting) Shoot(); };
-            playerControl.Tank1.Teleport.performed += ctx => { if (IsBulletActive && !isTeleporting) StartCoroutine(nameof(Teleport)); };
+            playerControl.Tank1.Teleport.performed += ctx => { if (IsBulletActive() && !isTeleporting) StartCoroutine(nameof(Teleport)); };
         }
         else if (CompareTag("Tank2"))
         {
             playerControl.Tank2.Forward.performed += ctx => forwardValue = ctx.ReadValue<float>();
             playerControl.Tank2.Rotate.performed += ctx => RotateValue = ctx.ReadValue<float>();
             playerControl.Tank2.Shoot.performed += ctx => { if (canShoot && !isTeleporting) Shoot(); };
-            playerControl.Tank2.Teleport.performed += ctx => { if (IsBulletActive && !isTeleporting) StartCoroutine(nameof(Teleport)); };
+            playerControl.Tank2.Teleport.performed += ctx => { if (IsBulletActive() && !isTeleporting) StartCoroutine(nameof(Teleport)); };
         }
+    }
+
+    private void SetupRigidBody()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.angularVelocity = Vector3.zero;
+        rb.centerOfMass = Vector3.zero;
+        rb.freezeRotation = true;
     }
 
     private void InstantiateBullet()
     {
         bullet = Instantiate(bullet);
         var bulletControl = bullet.GetComponent<BulletController>();
-        bulletControl.Player = this;
+        bulletControl.PlayerOwner = this;
         ControlBullet += bulletControl.Player_ControlBullet;
         bullet.SetActive(false);       
     }

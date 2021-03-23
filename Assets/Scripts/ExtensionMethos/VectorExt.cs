@@ -19,6 +19,12 @@ public static class VectorExt
         return new Vector3(x ?? vec3.x, y ?? vec3.y, z ?? vec3.z);
     }
 
+    // Same as With, but have offset
+    public static Vector3 WithOffset(this Vector3 vec3, float offset, float? x = null, float? y = null, float? z = null)
+    {
+        return new Vector3(x ?? (vec3.x + offset), y ?? (vec3.y + offset) , z ?? (vec3.z + offset));
+    }
+
     // Flat, with default y = 0
     public static Vector3 Flat(this Vector3 vec3, float y = 0)
     {
