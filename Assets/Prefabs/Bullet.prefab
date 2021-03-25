@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9575f4690c835f2469ac8f12f6c3ef3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 10
-  bulletTurnSpeed: 80
+  tank: {fileID: 0}
+  bulletSpeed: 15
+  bulletTurnSpeed: 100
   activeTime: 1.5

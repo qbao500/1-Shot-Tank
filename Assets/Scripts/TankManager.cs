@@ -15,8 +15,8 @@ public class TankManager : MonoBehaviour
 
     // Tanks
     public GameObject tankPrefab;
-    private PlayerController tank1;
-    private PlayerController tank2;
+    private PlayerInput tank1;
+    private PlayerInput tank2;
 
     // Score
     [SerializeField] private ScoreManagerSO scoreManager;
@@ -26,26 +26,23 @@ public class TankManager : MonoBehaviour
 
     private void Awake()
     {
+        FirstSpawn();        
+
         Border.PlayerFall += TankDied;
         BulletController.HitPlayer += TankDied;
-
-        FirstSpawn();        
     }
 
     private void FirstSpawn()
     {
         tank1 = Instantiate(tankPrefab, Vector3.zero.With(x: MinBound.x + spawnOffset, y: ySpawnPos), Quaternion.Euler(0, 90, 0))
-            .GetComponent<PlayerController>();
+            .GetComponent<PlayerInput>();
         tank2 = Instantiate(tankPrefab, Vector3.zero.With(x: MaxBound.x - spawnOffset, y: ySpawnPos), Quaternion.Euler(0, -90, 0))
-            .GetComponent<PlayerController>();
+            .GetComponent<PlayerInput>();
 
         // Assign tags
         tank1.gameObject.tag = "Tank1";
         tank2.gameObject.tag = "Tank2";
 
-        // Connect tanks to spawner
-        tank1.spawner = this;
-        tank2.spawner = this;
     }
 
     public void TankDied(GameObject deadTank, bool isFalled = false)
@@ -81,7 +78,7 @@ public class TankManager : MonoBehaviour
         }
     }
 
-    private Vector3 MinBound => groundCol.bounds.min.WithOffset(spawnOffset);
+    private Vector3 MinBound => groundCol.bounds.min.WithOffset(+spawnOffset);
 
     private Vector3 MaxBound => groundCol.bounds.max.WithOffset(-spawnOffset);
 }

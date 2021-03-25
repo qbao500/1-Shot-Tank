@@ -134,6 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7009887366751334317}
   - component: {fileID: 2697533564072210387}
+  - component: {fileID: 5454355673866008144}
   - component: {fileID: -4234825224570697401}
   m_Layer: 0
   m_Name: Tank
@@ -167,14 +168,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2241026824263627505}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31f23e9dd4b07654aadbd647c01af309, type: 3}
+  m_Script: {fileID: 11500000, guid: 6fd4d39597d2b794ebacf14e49e0465b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawner: {fileID: 0}
-  moveSpeed: 4
-  turnSpeed: 150
-  teleSpeed: 20
-  recoilPower: 6.5
+--- !u!114 &5454355673866008144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241026824263627505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d78e08eb2c2504ba2ace513f49b585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  turnSpeed: 100
+  teleSpeed: 15
+  recoilPower: 3
   shootPoint: {fileID: 484724357768185080}
   bullet: {fileID: 4919274459044377584, guid: 3d13a42d8f4d3f0419e1193b1a4a46a8, type: 3}
 --- !u!54 &-4234825224570697401
